@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection.Emit;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +19,7 @@ namespace CaroGame
         #region Properties
 
         ChessBoardManager managerBoard;
+        SocketManager socketManager;
 
         #endregion
 
@@ -27,6 +30,8 @@ namespace CaroGame
             InitializeComponent();
             managerBoard = new ChessBoardManager(pnChessBoard, txtName, pictureMark);
             managerBoard.DrawChessBoard();
+
+            socketManager = new SocketManager();
 
             progressBarCountDown.Maximum = Const.COUNT_DOWN_TIME;
             timerProgressBar.Interval = Const.COUNT_DOWN_INTERVAL;
@@ -181,5 +186,60 @@ namespace CaroGame
         }
 
         #endregion
+
+        void Listen()
+        {
+            string dataResult = socketManager.Receive().ToString();
+            MessageBox.Show(dataResult);
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            socketManager.IP = txtIP.Text;
+            if (!socketManager.ConnectServer())
+            {
+                socketManager.CreateServer();
+
+                Thread listen = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        try
+                        {
+                            Listen();
+                            break;
+                        }
+                        catch (Exception)
+                        {
+        
+                        }
+                        Thread.Sleep(500);
+                    }
+                });
+                listen.IsBackground = true;
+                listen.Start();
+            }
+            else
+            {
+                Thread listen = new Thread(() =>
+                {
+                    Listen();
+                });
+                listen.IsBackground = true;
+                listen.Start();
+
+                socketManager.Send("Gửi từ Client");
+            }
+        }
+
+        private void fChessBoard_Shown(object sender, EventArgs e)
+        {
+            txtIP.Text = socketManager.GetLocalIPv4(NetworkInterfaceType.Wireless80211);
+
+            if (string.IsNullOrEmpty(txtIP.Text))
+            {
+                txtIP.Text = socketManager.GetLocalIPv4(NetworkInterfaceType.Ethernet);
+            }
+        }
     }
 }

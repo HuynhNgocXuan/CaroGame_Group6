@@ -37,7 +37,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnSendMess = new System.Windows.Forms.Button();
             this.txtMess = new System.Windows.Forms.TextBox();
-            this.txtLan = new System.Windows.Forms.TextBox();
+            this.txtIP = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnStart = new System.Windows.Forms.Button();
@@ -104,7 +104,7 @@
             // 
             this.panel3.Controls.Add(this.btnSendMess);
             this.panel3.Controls.Add(this.txtMess);
-            this.panel3.Controls.Add(this.txtLan);
+            this.panel3.Controls.Add(this.txtIP);
             this.panel3.Location = new System.Drawing.Point(7, 602);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(278, 217);
@@ -133,16 +133,16 @@
             this.txtMess.Text = "Message";
             this.txtMess.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // txtLan
+            // txtIP
             // 
-            this.txtLan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtLan.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.txtLan.Location = new System.Drawing.Point(8, 12);
-            this.txtLan.Name = "txtLan";
-            this.txtLan.Size = new System.Drawing.Size(257, 30);
-            this.txtLan.TabIndex = 6;
-            this.txtLan.Text = "127.0.0.1";
-            this.txtLan.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtIP.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.txtIP.Location = new System.Drawing.Point(8, 12);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.Size = new System.Drawing.Size(257, 30);
+            this.txtIP.TabIndex = 6;
+            this.txtIP.Text = "127.0.0.1";
+            this.txtIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnConnect
             // 
@@ -154,6 +154,7 @@
             this.btnConnect.TabIndex = 8;
             this.btnConnect.Text = "Kết Nối";
             this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // panel4
             // 
@@ -225,7 +226,7 @@
             this.menuToolStripMenuItem});
             this.menuChessBoard.Location = new System.Drawing.Point(0, 0);
             this.menuChessBoard.Name = "menuChessBoard";
-            this.menuChessBoard.Size = new System.Drawing.Size(1372, 27);
+            this.menuChessBoard.Size = new System.Drawing.Size(1372, 30);
             this.menuChessBoard.TabIndex = 6;
             // 
             // menuToolStripMenuItem
@@ -237,7 +238,7 @@
             this.exitToolStripMenuItem});
             this.menuToolStripMenuItem.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(63, 23);
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(63, 26);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
             // startGameToolStripMenuItem
@@ -330,6 +331,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Caro Game";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fChessBoard_FormClosing);
+            this.Shown += new System.EventHandler(this.fChessBoard_Shown);
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbLogo)).EndInit();
             this.panel3.ResumeLayout(false);
@@ -356,7 +358,7 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Label lbMessage;
         private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.TextBox txtLan;
+        private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.Button btnSendMess;
         private System.Windows.Forms.TextBox txtMess;
         private System.Windows.Forms.Button btnExit;
