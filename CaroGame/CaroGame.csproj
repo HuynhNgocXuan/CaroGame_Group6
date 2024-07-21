@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ChessBoardManager.cs" />
     <Compile Include="Const.cs" />
+    <Compile Include="DataInfo.cs" />
     <Compile Include="fChessBoard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="caro.ico" />
+    <None Include="Resources\bluesky.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

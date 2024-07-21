@@ -66,6 +66,7 @@
             // pnChessBoard
             // 
             this.pnChessBoard.BackColor = System.Drawing.Color.LightBlue;
+            this.pnChessBoard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pnChessBoard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnChessBoard.Location = new System.Drawing.Point(309, 79);
             this.pnChessBoard.Name = "pnChessBoard";
@@ -226,7 +227,7 @@
             this.menuToolStripMenuItem});
             this.menuChessBoard.Location = new System.Drawing.Point(0, 0);
             this.menuChessBoard.Name = "menuChessBoard";
-            this.menuChessBoard.Size = new System.Drawing.Size(1372, 30);
+            this.menuChessBoard.Size = new System.Drawing.Size(1372, 27);
             this.menuChessBoard.TabIndex = 6;
             // 
             // menuToolStripMenuItem
@@ -238,7 +239,7 @@
             this.exitToolStripMenuItem});
             this.menuToolStripMenuItem.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(63, 26);
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(63, 23);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
             // startGameToolStripMenuItem
@@ -301,6 +302,7 @@
             this.txtName.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.txtName.Location = new System.Drawing.Point(1166, 39);
             this.txtName.Name = "txtName";
+            this.txtName.ReadOnly = true;
             this.txtName.Size = new System.Drawing.Size(185, 30);
             this.txtName.TabIndex = 10;
             this.txtName.Text = "Name";
@@ -315,6 +317,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(1372, 847);
             this.Controls.Add(this.progressBarCountDown);
             this.Controls.Add(this.txtName);

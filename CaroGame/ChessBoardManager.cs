@@ -50,7 +50,7 @@ namespace CaroGame
         #endregion
 
         #region Methods
-
+         
         public bool isUndo()
         {
             if (PlayerTimeLine.Count == 0) return false; 
@@ -107,6 +107,29 @@ namespace CaroGame
         private void Btn_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
+            Point point = GetPoint(btn);
+
+            if (btn.BackgroundImage != null)
+                return;
+            ChangeImage(btn);
+
+            playerTimeLine.Push(new PlayerInfo(point, currentPlayer));
+
+            currentPlayer = currentPlayer == 0 ? 1 : 0;
+            ShowPlayer();
+
+
+            if (playerTick != null) 
+                playerTick(this, new ButtonClickEvent(point));
+
+            if (isEndGame(btn))
+                EndGame();
+        }
+
+        public void OtherPlayerMark(Point point)
+        {
+            Button btn = Matrix[point.Y][point.X];
+
             if (btn.BackgroundImage != null)
                 return;
             ChangeImage(btn);
@@ -116,13 +139,10 @@ namespace CaroGame
             currentPlayer = currentPlayer == 0 ? 1 : 0;
             ShowPlayer();
 
-            if (playerTick != null) 
-                playerTick(this, new EventArgs());
-
             if (isEndGame(btn))
                 EndGame();
         }
-
+            
         void EndGame()
         {
             if (endedGame != null)
@@ -296,8 +316,8 @@ namespace CaroGame
 
         #region Events
 
-        private event EventHandler playerTick;
-        public event EventHandler PlayerTick
+        private event EventHandler<ButtonClickEvent> playerTick;
+        public event EventHandler<ButtonClickEvent> PlayerTick
         {
             add { playerTick += value; }
             remove { playerTick -= value; }
@@ -310,6 +330,20 @@ namespace CaroGame
             remove { endedGame -= value; }
         }
 
+       
+
         #endregion
+    }
+
+    internal class ButtonClickEvent : EventArgs
+    {
+        private Point point;
+
+        public Point Point { get => point; set => point = value; }
+
+        public ButtonClickEvent(Point point)
+        {
+            this.Point = point;
+        }
     }
 }

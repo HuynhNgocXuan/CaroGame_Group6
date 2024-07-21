@@ -28,6 +28,9 @@ namespace CaroGame
         public fChessBoard()
         {
             InitializeComponent();
+
+            Control.CheckForIllegalCrossThreadCalls = false;
+
             managerBoard = new ChessBoardManager(pnChessBoard, txtName, pictureMark);
             managerBoard.DrawChessBoard();
 
@@ -46,10 +49,14 @@ namespace CaroGame
             EndGame();
         }
 
-        private void ManagerBoard_PlayerTick(object sender, EventArgs e)
+        private void ManagerBoard_PlayerTick(object sender, ButtonClickEvent e)
         {
-            timerProgressBar.Start();
+            //timerProgressBar.Start();
             progressBarCountDown.Value = 0;
+            pnChessBoard.Enabled = false;
+            socketManager.Send(new DataInfo((int)DataCommand.SEND_POINT, "", e.Point));
+
+            Listen();
         }
 
         #endregion
@@ -108,7 +115,7 @@ namespace CaroGame
 
         private void btnSendMess_Click(object sender, EventArgs e)
         {
-            lbMessage.Text = txtMess.Text;
+            socketManager.Send(txtMess.Text.ToString());
         }
 
 
@@ -189,8 +196,66 @@ namespace CaroGame
 
         void Listen()
         {
-            string dataResult = socketManager.Receive().ToString();
-            MessageBox.Show(dataResult);
+
+            Thread listen = new Thread(() =>
+            {
+
+                try
+                {
+                    DataInfo dataResult = (DataInfo)socketManager.Receive();
+                    ProcessData(dataResult);
+                }
+                catch (Exception)
+                {
+                    //MessageBox.Show("Error");
+                }
+                
+            });
+            listen.IsBackground = true;
+            listen.Start();
+            
+        }
+
+        void ProcessData(DataInfo data)
+        {
+            switch (data.Command)
+            {
+               
+                case (int)DataCommand.NOTIFY:
+
+                    break;
+
+                case (int)DataCommand.SEND_POINT:
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        progressBarCountDown.Value = 0;
+                        //timerProgressBar.Start();
+                        pnChessBoard.Enabled = true;
+                        managerBoard.OtherPlayerMark(data.Point);
+                    }));
+                    break;
+
+                case (int)DataCommand.NEW_GAME:
+
+                    break;
+
+                case (int)DataCommand.END_GAME:
+
+                    break;
+
+                case (int)DataCommand.UNDO:
+
+                    break;
+
+                case (int)DataCommand.EXIT:
+
+                    break;
+
+                default:
+                    break;
+            }
+
+            Listen();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -199,36 +264,10 @@ namespace CaroGame
             if (!socketManager.ConnectServer())
             {
                 socketManager.CreateServer();
-
-                Thread listen = new Thread(() =>
-                {
-                    while (true)
-                    {
-                        try
-                        {
-                            Listen();
-                            break;
-                        }
-                        catch (Exception)
-                        {
-        
-                        }
-                        Thread.Sleep(500);
-                    }
-                });
-                listen.IsBackground = true;
-                listen.Start();
             }
             else
             {
-                Thread listen = new Thread(() =>
-                {
-                    Listen();
-                });
-                listen.IsBackground = true;
-                listen.Start();
-
-                socketManager.Send("Gửi từ Client");
+                Listen();
             }
         }
 
@@ -241,5 +280,7 @@ namespace CaroGame
                 txtIP.Text = socketManager.GetLocalIPv4(NetworkInterfaceType.Ethernet);
             }
         }
+
+        
     }
 }
