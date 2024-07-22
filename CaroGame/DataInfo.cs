@@ -31,6 +31,7 @@ namespace CaroGame
         SEND_POINT,
         NEW_GAME,
         END_GAME,
+        TIME_OUT,
         UNDO,
         EXIT
     }

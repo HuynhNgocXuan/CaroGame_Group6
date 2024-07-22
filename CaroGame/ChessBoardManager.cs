@@ -53,22 +53,63 @@ namespace CaroGame
          
         public bool isUndo()
         {
-            if (PlayerTimeLine.Count == 0) return false; 
-            PlayerInfo playerOldStep = playerTimeLine.Pop();
+            if (playerTimeLine.Count <= 0)
+            {
+                return false;
+            }
+            PlayerInfo oldPoint = playerTimeLine.Peek();
+            CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
+            bool isUndo1 = UndoAStep();
+            bool isUndo2 = UndoAStep();
+            return isUndo1 && isUndo2;
+           /* if (PlayerTimeLine.Count == 0) return false; 
+            PlayerInfo playerOldStep = playerTimeLine.Peek();
             Button btn = Matrix[playerOldStep.PointMark.Y][playerOldStep.PointMark.X];
             btn.BackgroundImage = null;
 
             currentPlayer = playerOldStep.CurrentPlayer;
+            ShowPlayer();
+            return true;*/
+        }
+        private bool UndoAStep()
+        {
+
+            if (playerTimeLine.Count <= 0)
+            {
+                return false;
+            }
+           
+            PlayerInfo oldPoint = playerTimeLine.Pop();
+
+            Button btn = Matrix[oldPoint.PointMark.Y][oldPoint.PointMark.X];
+
+       
+            btn.BackgroundImage = null;
+
+           
+
+            if (playerTimeLine.Count <= 0)
+            {
+                CurrentPlayer = 0;
+            }
+            else
+            {
+                oldPoint = playerTimeLine.Peek();
+
+            }
             ShowPlayer();
             return true;
         }
 
         public void DrawChessBoard()
         {
+            pnChessBoard.Enabled = true;
+            pnChessBoard.Controls.Clear();
+            playerTimeLine = new Stack<PlayerInfo>();
             currentPlayer = 0;
             ShowPlayer();
 
-            pnChessBoard.Enabled = false;
+            
 
             Matrix = new List<List<Button>>();
             playerTimeLine = new Stack<PlayerInfo>();
@@ -98,9 +139,10 @@ namespace CaroGame
 
                     oldBtn = btn;
                 }
+                
+                oldBtn.Location = new Point(0, oldBtn.Location.Y + Const.CELL_HEIGHT);
                 oldBtn.Width = 0;
                 oldBtn.Height = 0;
-                oldBtn.Location = new Point(0, oldBtn.Location.Y + Const.CELL_HEIGHT);
             }
         }
 
