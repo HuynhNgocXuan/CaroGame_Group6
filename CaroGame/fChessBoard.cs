@@ -131,8 +131,10 @@ namespace CaroGame
 
         private void btnNewPlay_Click(object sender, EventArgs e)
         {
-           
+            btnStart.Enabled = true;  
             NewGame();
+            socketManager.Send(new DataInfo((int)DataCommand.NEW_GAME, "", new Point()));
+            pnChessBoard.Enabled = true;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
