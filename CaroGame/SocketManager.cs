@@ -41,7 +41,7 @@ namespace CaroGame
 
         private bool SendData(Socket target, byte[] arrayData)
         {
-            return target.Send(arrayData) == 1 ? true : false;
+            return target.Send(arrayData) == 0 ? true : false;
         }
 
         private bool ReceiveData(Socket target, byte[] arrayData)
