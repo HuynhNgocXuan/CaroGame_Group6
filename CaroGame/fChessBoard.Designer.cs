@@ -92,7 +92,7 @@
             // 
             // ptbLogo
             // 
-            this.ptbLogo.BackgroundImage = global::CaroGame.Properties.Resources.jesu;
+            this.ptbLogo.BackgroundImage = global::CaroGame.Properties.Resources.Tan;
             this.ptbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ptbLogo.Location = new System.Drawing.Point(3, 1);
             this.ptbLogo.Name = "ptbLogo";

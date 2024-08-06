@@ -55,7 +55,7 @@ namespace CaroGame
             progressBarCountDown.Value = 0;
             pnChessBoard.Enabled = false;
             socketManager.Send(new DataInfo((int)DataCommand.SEND_POINT, "", e.Point));
-
+            undoGameToolStripMenuItem.Enabled = true;
             Listen();
         }
 
@@ -69,7 +69,8 @@ namespace CaroGame
             pnChessBoard.BackColor = Color.LightBlue;
             timerProgressBar.Stop();
             undoGameToolStripMenuItem.Enabled = false;
-            MessageBox.Show("Kết thúc ", "Thông báo");
+            MessageBox.Show("Bạn đã chiến thắng", "Thông báo");
+            socketManager.Send(new DataInfo((int)DataCommand.EXIT, "Kết thúc", new Point()));
         }
 
         void StartGame()
@@ -92,7 +93,6 @@ namespace CaroGame
         void UndoGame()
         {
             managerBoard.isUndo();
-
         }
 
         void ExitGame()
@@ -115,7 +115,7 @@ namespace CaroGame
 
         private void btnSendMess_Click(object sender, EventArgs e)
         {
-            socketManager.Send(txtMess.Text.ToString());
+            socketManager.Send(new DataInfo((int)DataCommand.NOTIFY, txtMess.Text.ToString(), new Point()));
         }
 
 
@@ -126,8 +126,8 @@ namespace CaroGame
 
         private void btnNewPlay_Click(object sender, EventArgs e)
         {
-           
             NewGame();
+            socketManager.Send(new DataInfo((int)DataCommand.NEW_GAME, "Chơi mới", new Point()));
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -149,6 +149,8 @@ namespace CaroGame
         private void undoGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UndoGame();
+            socketManager.Send(new DataInfo((int)DataCommand.UNDO, "Quay lại", new Point()));
+            pnChessBoard.Enabled = true;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -160,6 +162,14 @@ namespace CaroGame
         {
             if (MessageBox.Show("Bạn chắc chắn muốn thoát không?", "Thông báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 e.Cancel = true;
+            else
+            {
+                try
+                {
+                    socketManager.Send(new DataInfo((int)DataCommand.EXIT, txtName.Text.ToString(), new Point()));
+                }
+                catch (Exception) { }
+            }
         }
 
         private void btnNewPlay_MouseHover(object sender, EventArgs e)
@@ -222,7 +232,7 @@ namespace CaroGame
             {
                
                 case (int)DataCommand.NOTIFY:
-
+                    lbMessage.Text = data.Message;
                     break;
 
                 case (int)DataCommand.SEND_POINT:
@@ -232,23 +242,33 @@ namespace CaroGame
                         //timerProgressBar.Start();
                         pnChessBoard.Enabled = true;
                         managerBoard.OtherPlayerMark(data.Point);
+                        undoGameToolStripMenuItem.Enabled = false;
                     }));
                     break;
 
                 case (int)DataCommand.NEW_GAME:
-
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        NewGame();
+                    }));
                     break;
 
                 case (int)DataCommand.END_GAME:
-
+                    MessageBox.Show("Bạn đã thua", "Thông báo");
                     break;
 
                 case (int)DataCommand.UNDO:
-
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        UndoGame();
+                        pnChessBoard.Enabled = false;
+                        undoGameToolStripMenuItem.Enabled = false;
+                    }));
                     break;
 
                 case (int)DataCommand.EXIT:
-
+                    timerProgressBar.Stop();
+                    MessageBox.Show(data.Message + ": Đã thoát game!", "thông báo");
                     break;
 
                 default:
@@ -263,11 +283,16 @@ namespace CaroGame
             socketManager.IP = txtIP.Text;
             if (!socketManager.ConnectServer())
             {
+                MessageBox.Show("Connect To Client");
                 socketManager.CreateServer();
+                btnConnect.Enabled = false;
             }
             else
             {
+                MessageBox.Show("Connect To Server");
                 Listen();
+                btnConnect.Enabled = false;
+                btnStart.Enabled = false;
             }
         }
 
@@ -280,7 +305,5 @@ namespace CaroGame
                 txtIP.Text = socketManager.GetLocalIPv4(NetworkInterfaceType.Ethernet);
             }
         }
-
-        
     }
 }
