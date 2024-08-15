@@ -18,6 +18,7 @@ namespace CaroGame
         private int currentPlayer;
         private TextBox playerName;
         private PictureBox pictureMark;
+        private PictureBox ptbLogo;
         private List<List<Button>> matrix;
         private Stack<PlayerInfo> playerTimeLine;
 
@@ -26,6 +27,7 @@ namespace CaroGame
         public int CurrentPlayer { get => currentPlayer; set => currentPlayer = value; }
         public TextBox PlayerName { get => playerName; set => playerName = value; }
         public PictureBox PictureMark { get => pictureMark; set => pictureMark = value; }
+        public PictureBox PtbLogo { get => ptbLogo; set => ptbLogo = value; }
         public List<List<Button>> Matrix { get => matrix; set => matrix = value; }
         internal Stack<PlayerInfo> PlayerTimeLine { get => playerTimeLine; set => playerTimeLine = value; }
 
@@ -33,16 +35,20 @@ namespace CaroGame
 
         #region Initialize
 
-        public ChessBoardManager(Panel pnChessBoard, TextBox playerName, PictureBox pictureMark)
+        public ChessBoardManager(Panel pnChessBoard, TextBox playerName, PictureBox pictureMark, PictureBox PtbLogo)
         {
             this.PnChessBoard = pnChessBoard;
             this.PlayerName = playerName;
             this.PictureMark = pictureMark;
+            this.PtbLogo = PtbLogo;
 
+            this.CurrentPlayer = 0;
             this.Player = new List<Player>()
             {
-                new Player( "Tanjiro", Image.FromFile(Application.StartupPath + "\\Resources\\x.jpg")),
-                new Player( "Zenitsu", Image.FromFile(Application.StartupPath + "\\Resources\\ov.jpg")),
+                new Player( "Tanjiro",  Image.FromFile(Application.StartupPath + "\\Resources\\Tan.jpg"),
+                                        Image.FromFile(Application.StartupPath + "\\Resources\\x.jpg")),
+                new Player( "Zenitsu", Image.FromFile(Application.StartupPath + "\\Resources\\jesu.jpg"),
+                                        Image.FromFile(Application.StartupPath + "\\Resources\\ov.jpg")),
             };
             
         }
@@ -62,14 +68,7 @@ namespace CaroGame
             bool isUndo1 = UndoAStep();
             bool isUndo2 = UndoAStep();
             return isUndo1 && isUndo2;
-           /* if (PlayerTimeLine.Count == 0) return false; 
-            PlayerInfo playerOldStep = playerTimeLine.Peek();
-            Button btn = Matrix[playerOldStep.PointMark.Y][playerOldStep.PointMark.X];
-            btn.BackgroundImage = null;
-
-            currentPlayer = playerOldStep.CurrentPlayer;
-            ShowPlayer();
-            return true;*/
+          
         }
         private bool UndoAStep()
         {
@@ -106,7 +105,7 @@ namespace CaroGame
             pnChessBoard.Enabled = true;
             pnChessBoard.Controls.Clear();
             playerTimeLine = new Stack<PlayerInfo>();
-            currentPlayer = 0;
+            this.currentPlayer = 0;
             ShowPlayer();
 
             
@@ -155,7 +154,7 @@ namespace CaroGame
                 return;
             ChangeImage(btn);
 
-            playerTimeLine.Push(new PlayerInfo(point, currentPlayer));
+            playerTimeLine.Push(new PlayerInfo(point, currentPlayer, btn.BackgroundImage));
 
             currentPlayer = currentPlayer == 0 ? 1 : 0;
             ShowPlayer();
@@ -176,7 +175,7 @@ namespace CaroGame
                 return;
             ChangeImage(btn);
 
-            playerTimeLine.Push(new PlayerInfo(GetPoint(btn), currentPlayer));
+            playerTimeLine.Push(new PlayerInfo(GetPoint(btn), currentPlayer, btn.BackgroundImage));
 
             currentPlayer = currentPlayer == 0 ? 1 : 0;
             ShowPlayer();
@@ -346,12 +345,14 @@ namespace CaroGame
         {
             btn.BackgroundImageLayout = ImageLayout.Stretch;
             btn.BackgroundImage = Player[currentPlayer].Image;
+            btn.BackgroundImage = Player[currentPlayer].Symbol;
         }
 
         void ShowPlayer()
         {
             PlayerName.Text = Player[currentPlayer].Name;
-            PictureMark.BackgroundImage = Player[currentPlayer].Image;
+            ptbLogo.BackgroundImage = Player[currentPlayer].Image;
+            PictureMark.BackgroundImage = Player[currentPlayer].Symbol;
         }
 
         #endregion
