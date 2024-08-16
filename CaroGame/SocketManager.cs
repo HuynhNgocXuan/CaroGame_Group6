@@ -103,12 +103,10 @@ namespace CaroGame
             try
             {
                 client.Connect(ipPoint);
-                MessageBox.Show("Connect Server Success");
                 return true;
             }
             catch (Exception)
             {
-                MessageBox.Show("Connect Server Failure");
                 return false;
             }
 

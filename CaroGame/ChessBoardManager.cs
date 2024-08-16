@@ -21,6 +21,7 @@ namespace CaroGame
         private PictureBox ptbLogo;
         private List<List<Button>> matrix;
         private Stack<PlayerInfo> playerTimeLine;
+        SocketManager socketManager;
 
         public Panel PnChessBoard { get => pnChessBoard; set => pnChessBoard = value; }
         internal List<Player> Player { get => player; set => player = value; }
@@ -41,7 +42,7 @@ namespace CaroGame
             this.PlayerName = playerName;
             this.PictureMark = pictureMark;
             this.PtbLogo = PtbLogo;
-
+          
             this.CurrentPlayer = 0;
             this.Player = new List<Player>()
             {
