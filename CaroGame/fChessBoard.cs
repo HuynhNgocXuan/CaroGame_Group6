@@ -29,10 +29,10 @@ namespace CaroGame
         public fChessBoard()
         {
             InitializeComponent();
-
+            
             Control.CheckForIllegalCrossThreadCalls = false;
 
-            managerBoard = new ChessBoardManager(pnChessBoard, txtName, pictureMark);
+            managerBoard = new ChessBoardManager(pnChessBoard, txtName, pictureMark, ptbLogo);
             managerBoard.DrawChessBoard();
 
             socketManager = new SocketManager();
@@ -238,6 +238,7 @@ namespace CaroGame
 
         void ProcessData(DataInfo data)
         {
+            string PlayerName = managerBoard.Player[managerBoard.CurrentPlayer == 1 ? 0 : 1].Name;
             switch (data.Command)
             {
                
@@ -267,8 +268,10 @@ namespace CaroGame
                     break;
 
                 case (int)DataCommand.END_GAME:
-                    MessageBox.Show("Bạn đã thua", "Thông báo");
-
+                    MessageBox.Show(PlayerName + " đã chiến thắng  !!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case (int)DataCommand.TIME_OUT:
+                    MessageBox.Show("Hết giờ");
                     break;
                 case (int)DataCommand.UNDO:
                     this.Invoke((MethodInvoker)(() =>

@@ -92,8 +92,9 @@
             // 
             // ptbLogo
             // 
-            this.ptbLogo.BackgroundImage = global::CaroGame.Properties.Resources.Tan;
-            this.ptbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ptbLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ptbLogo.BackgroundImage = global::CaroGame.Properties.Resources.jesu;
+            this.ptbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ptbLogo.Location = new System.Drawing.Point(3, 1);
             this.ptbLogo.Name = "ptbLogo";
             this.ptbLogo.Size = new System.Drawing.Size(272, 199);
